@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PakJobs — Fresh Graduate Job Board</title>
+  <style>
+    /* ── Reset & Base ────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #0f1117;
+      --surface:  #1a1d27;
+      --card:     #21263a;
+      --border:   #2e3348;
+      --accent:   #4f7cff;
+      --green:    #22c55e;
+      --yellow:   #facc15;
+      --text:     #e2e8f0;
+      --muted:    #8892a4;
+      --radius:   12px;
+      --shadow:   0 4px 24px rgba(0,0,0,.45);
+      --transition: .18s ease;
+
+      --hr-color:    #7c3aed;
+      --sc-color:    #0891b2;
+      --mkt-color:   #db2777;
+      --ops-color:   #ea580c;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+    .logo {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -.5px;
+    }
+    .logo span { color: var(--text); }
+    .tagline {
+      color: var(--muted);
+      font-size: .82rem;
+      flex: 1;
+    }
+    #last-updated {
+      font-size: .78rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* ── Layout ─────────────────────────────────────────────────────────── */
+    main { max-width: 1060px; margin: 0 auto; padding: 28px 16px 64px; }
+
+    /* ── Filter bar ─────────────────────────────────────────────────────── */
+    .filter-section { margin-bottom: 24px; }
+    .filter-label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill {
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--surface);
+      transition: var(--transition);
+      user-select: none;
+    }
+    .pill:hover { border-color: var(--accent); color: var(--text); }
+    .pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .pill[data-dept="Human Resources"].active   { background: var(--hr-color);  border-color: var(--hr-color); }
+    .pill[data-dept="Supply Chain"].active      { background: var(--sc-color);  border-color: var(--sc-color); }
+    .pill[data-dept="Marketing"].active         { background: var(--mkt-color); border-color: var(--mkt-color); }
+    .pill[data-dept="Operations"].active        { background: var(--ops-color); border-color: var(--ops-color); }
+
+    /* ── Stats bar ──────────────────────────────────────────────────────── */
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .stats-count {
+      font-size: .85rem;
+      color: var(--muted);
+    }
+    .stats-count strong { color: var(--text); font-weight: 600; }
+    .legend {
+      display: flex;
+      gap: 14px;
+      font-size: .78rem;
+      color: var(--muted);
+    }
+    .legend-item { display: flex; align-items: center; gap: 4px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot-green  { background: var(--green); }
+    .dot-yellow { background: var(--yellow); }
+
+    /* ── Job grid ───────────────────────────────────────────────────────── */
+    #job-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── Job card ───────────────────────────────────────────────────────── */
+    .job-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), border-color var(--transition);
+      animation: fadeUp .25s ease both;
+    }
+    .job-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .job-title {
+      font-size: .97rem;
+      font-weight: 700;
+      line-height: 1.35;
+      flex: 1;
+    }
+    .exp-badge {
+      flex-shrink: 0;
+      font-size: .7rem;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 3px 7px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .exp-badge.confirmed { background: rgba(34,197,94,.15); color: var(--green); }
+    .exp-badge.unclear   { background: rgba(250,204,21,.12); color: var(--yellow); }
+
+    .job-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .meta-row {
+      font-size: .8rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .meta-row svg { flex-shrink: 0; }
+
+    .dept-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .dept-chip {
+      font-size: .7rem;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 999px;
+      color: #fff;
+    }
+    .chip-hr   { background: var(--hr-color); }
+    .chip-sc   { background: var(--sc-color); }
+    .chip-mkt  { background: var(--mkt-color); }
+    .chip-ops  { background: var(--ops-color); }
+
+    .card-footer {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .source-badge {
+      font-size: .72rem;
+      color: var(--muted);
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 7px;
+    }
+    .apply-btn {
+      text-decoration: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: .8rem;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 7px 16px;
+      transition: opacity var(--transition);
+    }
+    .apply-btn:hover { opacity: .85; }
+
+    /* ── Loading / Error states ─────────────────────────────────────────── */
+    #state-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+      gap: 18px;
+      text-align: center;
+    }
+    #state-overlay.visible { display: flex; }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .state-title { font-size: 1.1rem; font-weight: 700; }
+    .state-sub   { font-size: .85rem; color: var(--muted); max-width: 380px; }
+    #log-box {
+      font-size: .72rem;
+      font-family: monospace;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      max-height: 160px;
+      overflow-y: auto;
+      width: 100%;
+      max-width: 520px;
+      text-align: left;
+    }
+    #log-box p { margin-bottom: 2px; }
+
+    /* ── Empty state ────────────────────────────────────────────────────── */
+    #empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      gap: 10px;
+      text-align: center;
+    }
+    #empty-state.visible { display: flex; }
+    .empty-icon { font-size: 2.5rem; }
+
+    /* ── Responsive ─────────────────────────────────────────────────────── */
+    @media (max-width: 520px) {
+      header { flex-wrap: wrap; }
+      .tagline { display: none; }
+      #job-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────────────────────── -->
+<header>
+  <div class="logo">Pak<span>Jobs</span></div>
+  <div class="tagline">Verified 0–1 yr experience roles in Lahore, Islamabad &amp; Karachi</div>
+  <div id="last-updated">Loading…</div>
+</header>
+
+<!-- ── Main ────────────────────────────────────────────────────────────────── -->
+<main>
+
+  <!-- Filters -->
+  <div class="filter-section">
+    <div class="filter-label">Department</div>
+    <div class="pills" id="dept-pills">
+      <div class="pill active" data-dept="All">All departments</div>
+      <div class="pill" data-dept="Human Resources">Human Resources</div>
+      <div class="pill" data-dept="Supply Chain">Supply Chain</div>
+      <div class="pill" data-dept="Marketing">Marketing</div>
+      <div class="pill" data-dept="Operations">Operations</div>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <div class="filter-label">City</div>
+    <div class="pills" id="city-pills">
+      <div class="pill active" data-city="All">All cities</div>
+      <div class="pill" data-city="lahore">Lahore</div>
+      <div class="pill" data-city="islamabad">Islamabad</div>
+      <div class="pill" data-city="karachi">Karachi</div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stats-count" id="stats-count">— jobs</div>
+    <div class="legend">
+      <div class="legend-item"><span class="dot dot-green"></span> Exp confirmed</div>
+      <div class="legend-item"><span class="dot dot-yellow"></span> Exp not stated</div>
+    </div>
+  </div>
+
+  <!-- Loading / Error overlay -->
+  <div id="state-overlay">
+    <div class="spinner" id="state-spinner"></div>
+    <div class="state-title" id="state-title">Scanning LinkedIn, Nestle &amp; Unilever…</div>
+    <div class="state-sub" id="state-sub">
+      The first run takes a few minutes. Jobs will appear automatically when ready.
+    </div>
+    <div id="log-box"></div>
+  </div>
+
+  <!-- Empty results -->
+  <div id="empty-state">
+    <div class="empty-icon">🔍</div>
+    <div class="state-title">No jobs match these filters</div>
+    <div class="state-sub">Try clearing a filter or check back after the next scan.</div>
+  </div>
+
+  <!-- Job grid -->
+  <div id="job-grid"></div>
+
+</main>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+let allJobs     = [];
+let activeDept  = "All";
+let activeCity  = "All";
+
+// ── Dept chip class map ───────────────────────────────────────────────────────
+const deptClass = {
+  "Human Resources": "chip-hr",
+  "Supply Chain":    "chip-sc",
+  "Marketing":       "chip-mkt",
+  "Operations":      "chip-ops",
+};
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderJobs() {
+  const grid = document.getElementById("job-grid");
+  const empty = document.getElementById("empty-state");
+  grid.innerHTML = "";
+
+  const filtered = allJobs.filter(job => {
+    const deptOk = activeDept === "All" || (job.departments || []).includes(activeDept);
+    const cityOk = activeCity === "All" ||
+                   job.location.toLowerCase().includes(activeCity) ||
+                   (job._jd_city && job._jd_city.includes(activeCity));
+    return deptOk && cityOk;
+  });
+
+  document.getElementById("stats-count").innerHTML =
+    `<strong>${filtered.length}</strong> job${filtered.length !== 1 ? "s" : ""} found`;
+
+  if (filtered.length === 0) {
+    empty.classList.add("visible");
+    return;
+  }
+  empty.classList.remove("visible");
+
+  filtered.forEach((job, idx) => {
+    const depts  = job.departments || [];
+    const expOk  = job.exp_verified;
+    const card   = document.createElement("div");
+    card.className = "job-card";
+    card.style.animationDelay = `${Math.min(idx * 0.04, 0.5)}s`;
+
+    const chipHTML = depts.map(d =>
+      `<span class="dept-chip ${deptClass[d] || ''}">${d}</span>`
+    ).join("");
+
+    const locIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>`;
+    const bldIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`;
+
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="job-title">${escHtml(job.title)}</div>
+        <div class="exp-badge ${expOk ? 'confirmed' : 'unclear'}">
+          ${expOk ? '✓ Exp confirmed' : '~ Exp unclear'}
+        </div>
+      </div>
+      <div class="job-meta">
+        <div class="meta-row">${bldIcon} ${escHtml(job.company)}</div>
+        <div class="meta-row">${locIcon} ${escHtml(job.location)}</div>
+      </div>
+      <div class="dept-chips">${chipHTML}</div>
+      <div class="card-footer">
+        <span class="source-badge">${escHtml(job.source)}</span>
+        ${job.link ? `<a class="apply-btn" href="${escHtml(job.link)}" target="_blank" rel="noopener">View Job →</a>` : ''}
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+// ── Filters ───────────────────────────────────────────────────────────────────
+document.getElementById("dept-pills").addEventListener("click", e => {
+  const pill = e.target.closest(".pill");
+  if (!pill) return;
+  document.querySelectorAll("#dept-pills .pill").forEach(p => p.classList.remove("active"));
+  pill.classList.add("active");
+  activeDept = pill.dataset.dept;
+  renderJobs();
+});
+
+document.getElementById("city-pills").addEventListener("click", e => {
+  const pill = e.target.closest(".pill");
+  if (!pill) return;
+  document.querySelectorAll("#city-pills .pill").forEach(p => p.classList.remove("active"));
+  pill.classList.add("active");
+  activeCity = pill.dataset.city;
+  renderJobs();
+});
+
+// ── Polling ───────────────────────────────────────────────────────────────────
+let pollInterval = null;
+
+async function fetchJobs() {
+  try {
+    const res  = await fetch("/api/jobs");
+    const data = await res.json();
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+async function fetchStatus() {
+  try {
+    const res  = await fetch("/api/status");
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+function showOverlay(title, sub, showSpinner, showLog) {
+  const overlay = document.getElementById("state-overlay");
+  overlay.classList.add("visible");
+  document.getElementById("state-title").textContent   = title;
+  document.getElementById("state-sub").textContent     = sub;
+  document.getElementById("state-spinner").style.display = showSpinner ? "block" : "none";
+  document.getElementById("log-box").style.display      = showLog ? "block" : "none";
+}
+
+function hideOverlay() {
+  document.getElementById("state-overlay").classList.remove("visible");
+}
+
+function updateLog(lines) {
+  const box = document.getElementById("log-box");
+  box.innerHTML = (lines || []).map(l => `<p>${escHtml(l)}</p>`).join("");
+  box.scrollTop = box.scrollHeight;
+}
+
+async function poll() {
+  const data = await fetchJobs();
+
+  if (!data) return;
+
+  if (data.status === "loading") {
+    const st = await fetchStatus();
+    showOverlay(
+      "Scanning LinkedIn, Nestle & Unilever…",
+      "The first run takes a few minutes. Jobs will appear automatically.",
+      true, true
+    );
+    if (st) updateLog(st.log);
+    return;
+  }
+
+  if (data.status === "error") {
+    showOverlay(
+      "Monitor encountered an error",
+      "Will retry automatically on the next scheduled run (every 6 hours).",
+      false, false
+    );
+    stopPoll();
+    return;
+  }
+
+  // Ready
+  hideOverlay();
+  allJobs = data.jobs || [];
+  document.getElementById("last-updated").textContent =
+    data.run_at ? `Updated: ${data.run_at}` : "";
+  renderJobs();
+
+  // Poll slower once data is loaded
+  if (pollInterval && pollInterval._fast) {
+    stopPoll();
+    startPoll(60000); // check for updates every 60s
+  }
+}
+
+function stopPoll() {
+  if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+}
+
+function startPoll(ms, fast = false) {
+  stopPoll();
+  poll();
+  pollInterval = setInterval(poll, ms);
+  pollInterval._fast = fast;
+}
+
+// Start fast poll (every 5s) during loading phase
+startPoll(5000, true);
+</script>
+
+</body>
+</html>
