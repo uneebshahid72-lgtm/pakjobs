@@ -1,15 +1,23 @@
 """
 app.py — Flask web app for Pakistan Fresh Graduate Job Board.
-Runs monitor_core.run_monitor() on startup and every 6 hours via APScheduler.
+Job data is pushed from your local Mac via /api/push (LinkedIn blocks server IPs).
 """
 
+import os
 import threading
 import logging
 from datetime import datetime
-from flask import Flask, jsonify, render_template
-from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Flask, jsonify, render_template, request
 
-from monitor_core import run_monitor
+# APScheduler only imported if not in push-only mode
+try:
+    from apscheduler.schedulers.background import BackgroundScheduler
+    from monitor_core import run_monitor
+    _HAS_SCHEDULER = True
+except Exception:
+    _HAS_SCHEDULER = False
+
+PUSH_SECRET = os.environ.get("PUSH_SECRET", "pakjobs-secret")
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -47,11 +55,16 @@ def _run_job():
         with _lock:
             _status = "error"
 
-# ── Scheduler ─────────────────────────────────────────────────────────────────
-scheduler = BackgroundScheduler(daemon=True)
-scheduler.add_job(_run_job, "interval", hours=6, id="monitor",
-                  next_run_time=datetime.now())   # run immediately on startup
-scheduler.start()
+# ── Scheduler (only runs locally where LinkedIn works) ────────────────────────
+if _HAS_SCHEDULER and os.environ.get("DISABLE_SCRAPER") != "1":
+    scheduler = BackgroundScheduler(daemon=True)
+    scheduler.add_job(_run_job, "interval", hours=6, id="monitor",
+                      next_run_time=datetime.now())
+    scheduler.start()
+else:
+    # On Render: start in ready state (waiting for push)
+    with _lock:
+        _status = "ready"
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
@@ -90,6 +103,27 @@ def api_refresh():
     t = threading.Thread(target=_run_job, daemon=True)
     t.start()
     return jsonify({"message": "Refresh triggered."})
+
+
+@app.route("/api/push", methods=["POST"])
+def api_push():
+    """
+    Receive job data pushed from your local Mac.
+    Requires header: X-Secret: <PUSH_SECRET>
+    Body: JSON with {"jobs": [...], "run_at": "...", "total": N}
+    """
+    global _data, _status
+    secret = request.headers.get("X-Secret", "")
+    if secret != PUSH_SECRET:
+        return jsonify({"error": "Unauthorized"}), 401
+    body = request.get_json(silent=True)
+    if not body or "jobs" not in body:
+        return jsonify({"error": "Invalid payload"}), 400
+    with _lock:
+        _data   = body
+        _status = "ready"
+    log.info(f"Push received — {body.get('total', 0)} jobs updated.")
+    return jsonify({"ok": True, "total": body.get("total", 0)})
 
 
 # ── Entry ─────────────────────────────────────────────────────────────────────
