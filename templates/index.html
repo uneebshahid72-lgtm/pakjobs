@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PakJobs — Fresh Graduate Job Board</title>
+  <title>PakJobs — Graduate Job Board</title>
   <style>
-    /* ── Reset & Base ────────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg:       #0f1117;
@@ -13,18 +12,11 @@
       --card:     #21263a;
       --border:   #2e3348;
       --accent:   #4f7cff;
-      --green:    #22c55e;
-      --yellow:   #facc15;
       --text:     #e2e8f0;
       --muted:    #8892a4;
       --radius:   12px;
       --shadow:   0 4px 24px rgba(0,0,0,.45);
       --transition: .18s ease;
-
-      --hr-color:    #7c3aed;
-      --sc-color:    #0891b2;
-      --mkt-color:   #db2777;
-      --ops-color:   #ea580c;
     }
     html { scroll-behavior: smooth; }
     body {
@@ -35,107 +27,97 @@
       min-height: 100vh;
     }
 
-    /* ── Header ─────────────────────────────────────────────────────────── */
+    /* ── Header ── */
     header {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
-      padding: 18px 24px;
+      padding: 16px 24px;
       display: flex;
       align-items: center;
       gap: 16px;
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(8px);
     }
-    .logo {
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: -.5px;
-    }
+    .logo { font-size: 1.3rem; font-weight: 700; color: var(--accent); letter-spacing: -.5px; }
     .logo span { color: var(--text); }
-    .tagline {
-      color: var(--muted);
-      font-size: .82rem;
-      flex: 1;
-    }
-    #last-updated {
-      font-size: .78rem;
-      color: var(--muted);
-      white-space: nowrap;
-    }
+    .tagline { color: var(--muted); font-size: .82rem; flex: 1; }
+    #last-updated { font-size: .78rem; color: var(--muted); white-space: nowrap; }
 
-    /* ── Layout ─────────────────────────────────────────────────────────── */
-    main { max-width: 1060px; margin: 0 auto; padding: 28px 16px 64px; }
+    /* ── Layout ── */
+    main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
 
-    /* ── Filter bar ─────────────────────────────────────────────────────── */
-    .filter-section { margin-bottom: 24px; }
+    /* ── Filter sections ── */
+    .filter-section { margin-bottom: 18px; }
     .filter-label {
-      font-size: .72rem;
-      font-weight: 600;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
+      font-size: .72rem; font-weight: 600; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
     }
     .pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      display: flex; flex-wrap: wrap; gap: 7px;
     }
     .pill {
       cursor: pointer;
       border: 1.5px solid var(--border);
       border-radius: 999px;
-      padding: 5px 14px;
-      font-size: .8rem;
+      padding: 5px 13px;
+      font-size: .78rem;
       font-weight: 500;
       color: var(--muted);
       background: var(--surface);
       transition: var(--transition);
       user-select: none;
+      white-space: nowrap;
     }
     .pill:hover { border-color: var(--accent); color: var(--text); }
     .pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .pill[data-dept="Human Resources"].active   { background: var(--hr-color);  border-color: var(--hr-color); }
-    .pill[data-dept="Supply Chain"].active      { background: var(--sc-color);  border-color: var(--sc-color); }
-    .pill[data-dept="Marketing"].active         { background: var(--mkt-color); border-color: var(--mkt-color); }
-    .pill[data-dept="Operations"].active        { background: var(--ops-color); border-color: var(--ops-color); }
 
-    /* ── Stats bar ──────────────────────────────────────────────────────── */
+    /* Dept-specific active colours */
+    .pill[data-dept="Human Resources"].active           { background:#7c3aed; border-color:#7c3aed; }
+    .pill[data-dept="Marketing"].active                 { background:#db2777; border-color:#db2777; }
+    .pill[data-dept="Finance & Accounting"].active      { background:#059669; border-color:#059669; }
+    .pill[data-dept="Sales"].active                     { background:#d97706; border-color:#d97706; }
+    .pill[data-dept="Supply Chain & Logistics"].active  { background:#0891b2; border-color:#0891b2; }
+    .pill[data-dept="Procurement"].active               { background:#0e7490; border-color:#0e7490; }
+    .pill[data-dept="Operations"].active                { background:#ea580c; border-color:#ea580c; }
+    .pill[data-dept="Business Development"].active      { background:#65a30d; border-color:#65a30d; }
+    .pill[data-dept="Information Technology"].active    { background:#2563eb; border-color:#2563eb; }
+    .pill[data-dept="Data & Analytics"].active          { background:#7c3aed; border-color:#7c3aed; }
+    .pill[data-dept="Customer Service"].active          { background:#0d9488; border-color:#0d9488; }
+    .pill[data-dept="Public Relations & Communications"].active { background:#be185d; border-color:#be185d; }
+    .pill[data-dept="Legal & Compliance"].active        { background:#78350f; border-color:#78350f; }
+    .pill[data-dept="Research & Development"].active    { background:#1d4ed8; border-color:#1d4ed8; }
+    .pill[data-dept="Product Management"].active        { background:#9333ea; border-color:#9333ea; }
+    .pill[data-dept="Quality Assurance"].active         { background:#b45309; border-color:#b45309; }
+    .pill[data-dept="Administration"].active            { background:#475569; border-color:#475569; }
+    .pill[data-dept="Training & Development"].active    { background:#0f766e; border-color:#0f766e; }
+    .pill[data-dept="Risk Management"].active           { background:#dc2626; border-color:#dc2626; }
+    .pill[data-dept="Strategy & Consulting"].active     { background:#6d28d9; border-color:#6d28d9; }
+
+    /* Exp pill active colours */
+    .pill[data-exp="0-1"].active   { background:#22c55e; border-color:#22c55e; }
+    .pill[data-exp="1-2"].active   { background:#84cc16; border-color:#84cc16; }
+    .pill[data-exp="2-3"].active   { background:#eab308; border-color:#eab308; color:#000; }
+    .pill[data-exp="3-4"].active   { background:#f97316; border-color:#f97316; }
+    .pill[data-exp="4+"].active    { background:#ef4444; border-color:#ef4444; }
+    .pill[data-exp="unclear"].active { background:#64748b; border-color:#64748b; }
+
+    /* ── Stats bar ── */
     .stats-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      gap: 8px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 8px;
     }
-    .stats-count {
-      font-size: .85rem;
-      color: var(--muted);
-    }
+    .stats-count { font-size: .85rem; color: var(--muted); }
     .stats-count strong { color: var(--text); font-weight: 600; }
-    .legend {
-      display: flex;
-      gap: 14px;
-      font-size: .78rem;
-      color: var(--muted);
-    }
-    .legend-item { display: flex; align-items: center; gap: 4px; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-    .dot-green  { background: var(--green); }
-    .dot-yellow { background: var(--yellow); }
 
-    /* ── Job grid ───────────────────────────────────────────────────────── */
+    /* ── Job grid ── */
     #job-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 16px;
     }
 
-    /* ── Job card ───────────────────────────────────────────────────────── */
+    /* ── Job card ── */
     .job-card {
       background: var(--card);
       border: 1px solid var(--border);
@@ -146,179 +128,165 @@
       gap: 12px;
       box-shadow: var(--shadow);
       transition: transform var(--transition), border-color var(--transition);
-      animation: fadeUp .25s ease both;
+      animation: fadeUp .22s ease both;
     }
     .job-card:hover { transform: translateY(-2px); border-color: var(--accent); }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 8px;
-    }
-    .job-title {
-      font-size: .97rem;
-      font-weight: 700;
-      line-height: 1.35;
-      flex: 1;
-    }
+    .card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+    .job-title { font-size:.95rem; font-weight:700; line-height:1.35; flex:1; }
+
     .exp-badge {
-      flex-shrink: 0;
-      font-size: .7rem;
-      font-weight: 700;
-      border-radius: 6px;
-      padding: 3px 7px;
-      display: flex;
-      align-items: center;
-      gap: 3px;
+      flex-shrink:0; font-size:.68rem; font-weight:700;
+      border-radius:6px; padding:3px 8px;
     }
-    .exp-badge.confirmed { background: rgba(34,197,94,.15); color: var(--green); }
-    .exp-badge.unclear   { background: rgba(250,204,21,.12); color: var(--yellow); }
+    .exp-0-1    { background:rgba(34,197,94,.15);  color:#22c55e; }
+    .exp-1-2    { background:rgba(132,204,22,.15);  color:#84cc16; }
+    .exp-2-3    { background:rgba(234,179,8,.15);   color:#eab308; }
+    .exp-3-4    { background:rgba(249,115,22,.15);  color:#f97316; }
+    .exp-4plus  { background:rgba(239,68,68,.15);   color:#ef4444; }
+    .exp-unclear{ background:rgba(100,116,139,.15); color:#94a3b8; }
 
-    .job-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .meta-row {
-      font-size: .8rem;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .meta-row svg { flex-shrink: 0; }
+    .job-meta { display:flex; flex-direction:column; gap:4px; }
+    .meta-row { font-size:.8rem; color:var(--muted); display:flex; align-items:center; gap:6px; }
 
-    .dept-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .dept-chips { display:flex; flex-wrap:wrap; gap:5px; }
     .dept-chip {
-      font-size: .7rem;
-      font-weight: 600;
-      padding: 2px 9px;
-      border-radius: 999px;
-      color: #fff;
+      font-size:.68rem; font-weight:600; padding:2px 8px;
+      border-radius:999px; color:#fff;
     }
-    .chip-hr   { background: var(--hr-color); }
-    .chip-sc   { background: var(--sc-color); }
-    .chip-mkt  { background: var(--mkt-color); }
-    .chip-ops  { background: var(--ops-color); }
+    /* Dept chip colours */
+    .chip-hr    { background:#7c3aed; }
+    .chip-mkt   { background:#db2777; }
+    .chip-fin   { background:#059669; }
+    .chip-sales { background:#d97706; }
+    .chip-sc    { background:#0891b2; }
+    .chip-proc  { background:#0e7490; }
+    .chip-ops   { background:#ea580c; }
+    .chip-bd    { background:#65a30d; }
+    .chip-it    { background:#2563eb; }
+    .chip-data  { background:#7c3aed; }
+    .chip-cs    { background:#0d9488; }
+    .chip-pr    { background:#be185d; }
+    .chip-legal { background:#92400e; }
+    .chip-rd    { background:#1d4ed8; }
+    .chip-pm    { background:#9333ea; }
+    .chip-qa    { background:#b45309; }
+    .chip-admin { background:#475569; }
+    .chip-td    { background:#0f766e; }
+    .chip-risk  { background:#dc2626; }
+    .chip-strat { background:#6d28d9; }
 
     .card-footer {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
+      margin-top:auto; display:flex; align-items:center;
+      justify-content:space-between; gap:8px;
     }
     .source-badge {
-      font-size: .72rem;
-      color: var(--muted);
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--border);
-      border-radius: 5px;
-      padding: 2px 7px;
+      font-size:.72rem; color:var(--muted);
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border); border-radius:5px; padding:2px 7px;
     }
     .apply-btn {
-      text-decoration: none;
-      background: var(--accent);
-      color: #fff;
-      font-size: .8rem;
-      font-weight: 600;
-      border-radius: 8px;
-      padding: 7px 16px;
-      transition: opacity var(--transition);
+      text-decoration:none; background:var(--accent); color:#fff;
+      font-size:.8rem; font-weight:600; border-radius:8px;
+      padding:7px 16px; transition:opacity var(--transition);
     }
-    .apply-btn:hover { opacity: .85; }
+    .apply-btn:hover { opacity:.85; }
 
-    /* ── Loading / Error states ─────────────────────────────────────────── */
+    /* ── Loading overlay ── */
     #state-overlay {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 320px;
-      gap: 18px;
-      text-align: center;
+      display:none; flex-direction:column; align-items:center;
+      justify-content:center; min-height:320px; gap:18px; text-align:center;
     }
-    #state-overlay.visible { display: flex; }
+    #state-overlay.visible { display:flex; }
     .spinner {
-      width: 44px; height: 44px;
-      border: 3px solid var(--border);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      width:44px; height:44px;
+      border:3px solid var(--border); border-top-color:var(--accent);
+      border-radius:50%; animation:spin .8s linear infinite;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .state-title { font-size: 1.1rem; font-weight: 700; }
-    .state-sub   { font-size: .85rem; color: var(--muted); max-width: 380px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .state-title { font-size:1.1rem; font-weight:700; }
+    .state-sub   { font-size:.85rem; color:var(--muted); max-width:380px; }
     #log-box {
-      font-size: .72rem;
-      font-family: monospace;
-      color: var(--muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      max-height: 160px;
-      overflow-y: auto;
-      width: 100%;
-      max-width: 520px;
-      text-align: left;
+      font-size:.72rem; font-family:monospace; color:var(--muted);
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:8px; padding:12px 16px; max-height:160px;
+      overflow-y:auto; width:100%; max-width:520px; text-align:left;
     }
-    #log-box p { margin-bottom: 2px; }
+    #log-box p { margin-bottom:2px; }
 
-    /* ── Empty state ────────────────────────────────────────────────────── */
+    /* ── Empty state ── */
     #empty-state {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 220px;
-      gap: 10px;
-      text-align: center;
+      display:none; flex-direction:column; align-items:center;
+      justify-content:center; min-height:220px; gap:10px; text-align:center;
     }
-    #empty-state.visible { display: flex; }
-    .empty-icon { font-size: 2.5rem; }
+    #empty-state.visible { display:flex; }
+    .empty-icon { font-size:2.5rem; }
 
-    /* ── Responsive ─────────────────────────────────────────────────────── */
-    @media (max-width: 520px) {
-      header { flex-wrap: wrap; }
-      .tagline { display: none; }
-      #job-grid { grid-template-columns: 1fr; }
+    /* ── Responsive ── */
+    @media (max-width:520px) {
+      header { flex-wrap:wrap; }
+      .tagline { display:none; }
+      #job-grid { grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── Header ──────────────────────────────────────────────────────────────── -->
 <header>
   <div class="logo">Pak<span>Jobs</span></div>
-  <div class="tagline">Verified 0–1 yr experience roles in Lahore, Islamabad &amp; Karachi</div>
+  <div class="tagline">Graduate &amp; entry-level roles across Pakistan — updated every 6 hours</div>
   <div id="last-updated">Loading…</div>
 </header>
 
-<!-- ── Main ────────────────────────────────────────────────────────────────── -->
 <main>
 
-  <!-- Filters -->
+  <!-- Department filter -->
   <div class="filter-section">
     <div class="filter-label">Department</div>
     <div class="pills" id="dept-pills">
-      <div class="pill active" data-dept="All">All departments</div>
+      <div class="pill active" data-dept="All">All</div>
       <div class="pill" data-dept="Human Resources">Human Resources</div>
-      <div class="pill" data-dept="Supply Chain">Supply Chain</div>
       <div class="pill" data-dept="Marketing">Marketing</div>
+      <div class="pill" data-dept="Finance & Accounting">Finance & Accounting</div>
+      <div class="pill" data-dept="Sales">Sales</div>
+      <div class="pill" data-dept="Supply Chain & Logistics">Supply Chain & Logistics</div>
+      <div class="pill" data-dept="Procurement">Procurement</div>
       <div class="pill" data-dept="Operations">Operations</div>
+      <div class="pill" data-dept="Business Development">Business Development</div>
+      <div class="pill" data-dept="Information Technology">Information Technology</div>
+      <div class="pill" data-dept="Data & Analytics">Data & Analytics</div>
+      <div class="pill" data-dept="Customer Service">Customer Service</div>
+      <div class="pill" data-dept="Public Relations & Communications">PR & Communications</div>
+      <div class="pill" data-dept="Legal & Compliance">Legal & Compliance</div>
+      <div class="pill" data-dept="Research & Development">Research & Development</div>
+      <div class="pill" data-dept="Product Management">Product Management</div>
+      <div class="pill" data-dept="Quality Assurance">Quality Assurance</div>
+      <div class="pill" data-dept="Administration">Administration</div>
+      <div class="pill" data-dept="Training & Development">Training & Development</div>
+      <div class="pill" data-dept="Risk Management">Risk Management</div>
+      <div class="pill" data-dept="Strategy & Consulting">Strategy & Consulting</div>
     </div>
   </div>
 
+  <!-- Experience filter -->
+  <div class="filter-section">
+    <div class="filter-label">Experience Required</div>
+    <div class="pills" id="exp-pills">
+      <div class="pill active" data-exp="All">All levels</div>
+      <div class="pill" data-exp="0-1">0–1 yr (Fresh)</div>
+      <div class="pill" data-exp="1-2">1–2 yrs</div>
+      <div class="pill" data-exp="2-3">2–3 yrs</div>
+      <div class="pill" data-exp="3-4">3–4 yrs</div>
+      <div class="pill" data-exp="4+">4+ yrs</div>
+      <div class="pill" data-exp="unclear">Not stated</div>
+    </div>
+  </div>
+
+  <!-- City filter -->
   <div class="filter-section">
     <div class="filter-label">City</div>
     <div class="pills" id="city-pills">
@@ -332,18 +300,14 @@
   <!-- Stats -->
   <div class="stats-bar">
     <div class="stats-count" id="stats-count">— jobs</div>
-    <div class="legend">
-      <div class="legend-item"><span class="dot dot-green"></span> Exp confirmed</div>
-      <div class="legend-item"><span class="dot dot-yellow"></span> Exp not stated</div>
-    </div>
   </div>
 
-  <!-- Loading / Error overlay -->
+  <!-- Loading overlay -->
   <div id="state-overlay">
     <div class="spinner" id="state-spinner"></div>
     <div class="state-title" id="state-title">Scanning LinkedIn, Nestle &amp; Unilever…</div>
     <div class="state-sub" id="state-sub">
-      The first run takes a few minutes. Jobs will appear automatically when ready.
+      First run takes ~3–5 minutes. Jobs will appear automatically.
     </div>
     <div id="log-box"></div>
   </div>
@@ -362,50 +326,80 @@
 
 <script>
 // ── State ─────────────────────────────────────────────────────────────────────
-let allJobs     = [];
-let activeDept  = "All";
-let activeCity  = "All";
+let allJobs    = [];
+let activeDept = "All";
+let activeExp  = "All";
+let activeCity = "All";
 
-// ── Dept chip class map ───────────────────────────────────────────────────────
-const deptClass = {
-  "Human Resources": "chip-hr",
-  "Supply Chain":    "chip-sc",
-  "Marketing":       "chip-mkt",
-  "Operations":      "chip-ops",
+// ── Dept → chip CSS class map ─────────────────────────────────────────────────
+const deptChip = {
+  "Human Resources":               "chip-hr",
+  "Marketing":                     "chip-mkt",
+  "Finance & Accounting":          "chip-fin",
+  "Sales":                         "chip-sales",
+  "Supply Chain & Logistics":      "chip-sc",
+  "Procurement":                   "chip-proc",
+  "Operations":                    "chip-ops",
+  "Business Development":          "chip-bd",
+  "Information Technology":        "chip-it",
+  "Data & Analytics":              "chip-data",
+  "Customer Service":              "chip-cs",
+  "Public Relations & Communications": "chip-pr",
+  "Legal & Compliance":            "chip-legal",
+  "Research & Development":        "chip-rd",
+  "Product Management":            "chip-pm",
+  "Quality Assurance":             "chip-qa",
+  "Administration":                "chip-admin",
+  "Training & Development":        "chip-td",
+  "Risk Management":               "chip-risk",
+  "Strategy & Consulting":         "chip-strat",
 };
+
+// ── Exp badge CSS class ───────────────────────────────────────────────────────
+function expClass(range) {
+  const map = {
+    "0-1": "exp-0-1", "1-2": "exp-1-2", "2-3": "exp-2-3",
+    "3-4": "exp-3-4", "4+": "exp-4plus", "unclear": "exp-unclear",
+  };
+  return map[range] || "exp-unclear";
+}
+function expLabel(range) {
+  const map = {
+    "0-1": "0–1 yr", "1-2": "1–2 yrs", "2-3": "2–3 yrs",
+    "3-4": "3–4 yrs", "4+": "4+ yrs", "unclear": "Exp unclear",
+  };
+  return map[range] || range;
+}
 
 // ── Render ────────────────────────────────────────────────────────────────────
 function renderJobs() {
-  const grid = document.getElementById("job-grid");
+  const grid  = document.getElementById("job-grid");
   const empty = document.getElementById("empty-state");
   grid.innerHTML = "";
 
   const filtered = allJobs.filter(job => {
     const deptOk = activeDept === "All" || (job.departments || []).includes(activeDept);
+    const expOk  = activeExp  === "All" || job.exp_range === activeExp;
     const cityOk = activeCity === "All" ||
-                   job.location.toLowerCase().includes(activeCity) ||
-                   (job._jd_city && job._jd_city.includes(activeCity));
-    return deptOk && cityOk;
+                   job.location.toLowerCase().includes(activeCity);
+    return deptOk && expOk && cityOk;
   });
 
   document.getElementById("stats-count").innerHTML =
     `<strong>${filtered.length}</strong> job${filtered.length !== 1 ? "s" : ""} found`;
 
-  if (filtered.length === 0) {
-    empty.classList.add("visible");
-    return;
-  }
+  if (filtered.length === 0) { empty.classList.add("visible"); return; }
   empty.classList.remove("visible");
 
   filtered.forEach((job, idx) => {
-    const depts  = job.departments || [];
-    const expOk  = job.exp_verified;
-    const card   = document.createElement("div");
+    const depts   = job.departments || [];
+    const expR    = job.exp_range || "unclear";
+    const card    = document.createElement("div");
     card.className = "job-card";
-    card.style.animationDelay = `${Math.min(idx * 0.04, 0.5)}s`;
+    card.style.animationDelay = `${Math.min(idx * 0.035, 0.5)}s`;
 
     const chipHTML = depts.map(d =>
-      `<span class="dept-chip ${deptClass[d] || ''}">${d}</span>`
+      `<span class="dept-chip ${deptChip[d] || ''}">${escHtml(d)}</span>`
     ).join("");
 
     const locIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>`;
@@ -414,9 +408,7 @@ function renderJobs() {
     card.innerHTML = `
       <div class="card-top">
         <div class="job-title">${escHtml(job.title)}</div>
-        <div class="exp-badge ${expOk ? 'confirmed' : 'unclear'}">
-          ${expOk ? '✓ Exp confirmed' : '~ Exp unclear'}
-        </div>
+        <div class="exp-badge ${expClass(expR)}">${expLabel(expR)}</div>
       </div>
       <div class="job-meta">
         <div class="meta-row">${bldIcon} ${escHtml(job.company)}</div>
@@ -434,66 +426,48 @@ function renderJobs() {
 
 function escHtml(str) {
   return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-// ── Filters ───────────────────────────────────────────────────────────────────
-document.getElementById("dept-pills").addEventListener("click", e => {
-  const pill = e.target.closest(".pill");
-  if (!pill) return;
-  document.querySelectorAll("#dept-pills .pill").forEach(p => p.classList.remove("active"));
-  pill.classList.add("active");
-  activeDept = pill.dataset.dept;
-  renderJobs();
-});
+// ── Filter listeners ──────────────────────────────────────────────────────────
+function setupPills(containerId, onChange) {
+  document.getElementById(containerId).addEventListener("click", e => {
+    const pill = e.target.closest(".pill");
+    if (!pill) return;
+    document.querySelectorAll(`#${containerId} .pill`).forEach(p => p.classList.remove("active"));
+    pill.classList.add("active");
+    onChange(pill.dataset[containerId === "dept-pills" ? "dept" :
+                          containerId === "exp-pills"  ? "exp"  : "city"]);
+  });
+}
 
-document.getElementById("city-pills").addEventListener("click", e => {
-  const pill = e.target.closest(".pill");
-  if (!pill) return;
-  document.querySelectorAll("#city-pills .pill").forEach(p => p.classList.remove("active"));
-  pill.classList.add("active");
-  activeCity = pill.dataset.city;
-  renderJobs();
-});
+setupPills("dept-pills", v => { activeDept = v; renderJobs(); });
+setupPills("exp-pills",  v => { activeExp  = v; renderJobs(); });
+setupPills("city-pills", v => { activeCity = v; renderJobs(); });
 
 // ── Polling ───────────────────────────────────────────────────────────────────
 let pollInterval = null;
 
 async function fetchJobs() {
-  try {
-    const res  = await fetch("/api/jobs");
-    const data = await res.json();
-    return data;
-  } catch {
-    return null;
-  }
+  try { return await (await fetch("/api/jobs")).json(); }
+  catch { return null; }
 }
-
 async function fetchStatus() {
-  try {
-    const res  = await fetch("/api/status");
-    return await res.json();
-  } catch {
-    return null;
-  }
+  try { return await (await fetch("/api/status")).json(); }
+  catch { return null; }
 }
 
-function showOverlay(title, sub, showSpinner, showLog) {
-  const overlay = document.getElementById("state-overlay");
-  overlay.classList.add("visible");
-  document.getElementById("state-title").textContent   = title;
-  document.getElementById("state-sub").textContent     = sub;
-  document.getElementById("state-spinner").style.display = showSpinner ? "block" : "none";
-  document.getElementById("log-box").style.display      = showLog ? "block" : "none";
+function showOverlay(title, sub, spinner, showLog) {
+  document.getElementById("state-overlay").classList.add("visible");
+  document.getElementById("state-title").textContent = title;
+  document.getElementById("state-sub").textContent   = sub;
+  document.getElementById("state-spinner").style.display = spinner ? "block" : "none";
+  document.getElementById("log-box").style.display        = showLog ? "block" : "none";
 }
-
 function hideOverlay() {
   document.getElementById("state-overlay").classList.remove("visible");
 }
-
 function updateLog(lines) {
   const box = document.getElementById("log-box");
   box.innerHTML = (lines || []).map(l => `<p>${escHtml(l)}</p>`).join("");
@@ -502,58 +476,38 @@ function updateLog(lines) {
 
 async function poll() {
   const data = await fetchJobs();
-
   if (!data) return;
 
   if (data.status === "loading") {
     const st = await fetchStatus();
-    showOverlay(
-      "Scanning LinkedIn, Nestle & Unilever…",
-      "The first run takes a few minutes. Jobs will appear automatically.",
-      true, true
-    );
+    showOverlay("Scanning LinkedIn, Nestle & Unilever…",
+      "First run takes ~3–5 minutes. Jobs will appear automatically.", true, true);
     if (st) updateLog(st.log);
     return;
   }
-
   if (data.status === "error") {
-    showOverlay(
-      "Monitor encountered an error",
-      "Will retry automatically on the next scheduled run (every 6 hours).",
-      false, false
-    );
-    stopPoll();
-    return;
+    showOverlay("Monitor encountered an error",
+      "Will retry on the next scheduled run (every 6 hours).", false, false);
+    stopPoll(); return;
   }
 
-  // Ready
   hideOverlay();
   allJobs = data.jobs || [];
   document.getElementById("last-updated").textContent =
     data.run_at ? `Updated: ${data.run_at}` : "";
   renderJobs();
 
-  // Poll slower once data is loaded
-  if (pollInterval && pollInterval._fast) {
-    stopPoll();
-    startPoll(60000); // check for updates every 60s
-  }
+  if (pollInterval && pollInterval._fast) { stopPoll(); startPoll(60000); }
 }
 
-function stopPoll() {
-  if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
-}
-
+function stopPoll() { if (pollInterval) { clearInterval(pollInterval); pollInterval = null; } }
 function startPoll(ms, fast = false) {
-  stopPoll();
-  poll();
+  stopPoll(); poll();
   pollInterval = setInterval(poll, ms);
   pollInterval._fast = fast;
 }
 
-// Start fast poll (every 5s) during loading phase
 startPoll(5000, true);
 </script>
-
 </body>
 </html>
