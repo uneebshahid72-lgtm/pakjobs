@@ -134,8 +134,13 @@ TARGET_DEPTS = {
     ],
 }
 
-# Internship detection — use word boundary to avoid matching "international"
-_INTERNSHIP_RE = re.compile(r'(?<!\w)intern(?:ship|s|ed)?\b', re.IGNORECASE)
+# Internship detection — use word boundary to avoid matching "international".
+# Must use intern(?:ships?|s|ed)? so "internships" (plural) is matched:
+# intern+ships → "internships" → \b after s ✓
+# intern+ship  → "internship"  → \b after p ✓
+# intern+s     → "interns"     → \b after s ✓
+# intern       → "intern"      → \b after n ✓
+_INTERNSHIP_RE = re.compile(r'(?<!\w)intern(?:ships?|s|ed)?\b', re.IGNORECASE)
 
 SENIOR_TITLES = [
     "senior", "sr.", "manager", "head of", "director",
@@ -262,13 +267,16 @@ def _classify_exp(text):
         if min_hi is None or n < min_hi:
             min_hi = n
 
-    # experience: X
-    for m in re.finditer(r'experience[\s\w]{0,20}?:\s*(\d+)', text):
-        if _bypass_ctx(text, m.start()):
-            continue
-        n = int(m.group(1))
-        if min_hi is None or n < min_hi:
-            min_hi = n
+    # experience: X — last resort only; skipped if a range/years pattern already matched.
+    # If run unconditionally, "experience: 1-2 years" would match n=1 and wrongly
+    # overwrite min_hi=2 (set correctly by the range pattern above) with 1 → bad "0-1".
+    if min_hi is None:
+        for m in re.finditer(r'experience[\s\w]{0,20}?:\s*(\d+)', text):
+            if _bypass_ctx(text, m.start()):
+                continue
+            n = int(m.group(1))
+            if min_hi is None or n < min_hi:
+                min_hi = n
 
     if min_hi is None:
         return "unclear"

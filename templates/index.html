@@ -601,11 +601,13 @@ function renderJobs() {
     intSection.style.display = "none";
   }
 
-  // Jobs
+  // Jobs — always show the header when there are jobs (even with no internships visible)
   if (filteredJobs.length > 0) {
-    jobsHeader.style.display = filteredInts.length > 0 ? "flex" : "none";
+    jobsHeader.style.display = "flex";
     document.getElementById("jobs-section-count").textContent = filteredJobs.length;
     filteredJobs.forEach((job, idx) => grid.appendChild(makeCard(job, idx)));
+  } else {
+    jobsHeader.style.display = "none";
   }
 }
 

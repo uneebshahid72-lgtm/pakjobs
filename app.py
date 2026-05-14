@@ -9,6 +9,10 @@ import logging
 from datetime import datetime
 from flask import Flask, jsonify, render_template, request
 
+# ── Logging — configured first so every subsequent message uses the right format ──
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
+log = logging.getLogger(__name__)
+
 # APScheduler only imported if not in push-only mode
 try:
     from apscheduler.schedulers.background import BackgroundScheduler
@@ -22,16 +26,11 @@ try:
     import db as _db
     _db.init_db()
     _HAS_DB = True
-    log_startup = logging.getLogger(__name__)
-    log_startup.info("Database initialised.")
+    log.info("Database initialised.")
 except Exception as _db_err:
     _HAS_DB = False
 
 PUSH_SECRET = os.environ.get("PUSH_SECRET", "pakjobs-secret")
-
-# ── Logging ───────────────────────────────────────────────────────────────────
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
-log = logging.getLogger(__name__)
 
 # ── App ───────────────────────────────────────────────────────────────────────
 app = Flask(__name__)
@@ -110,7 +109,14 @@ def api_status():
 
 @app.route("/api/refresh", methods=["POST"])
 def api_refresh():
-    """Trigger an immediate monitor re-run (admin use)."""
+    """Trigger an immediate monitor re-run (admin use, local only)."""
+    # Guard: on Render run_monitor is never imported, so calling _run_job would
+    # raise NameError → status flips to "error". Reject early.
+    if not _HAS_SCHEDULER:
+        return jsonify({"error": "Scraper not available on this instance"}), 503
+    secret = request.headers.get("X-Secret", "")
+    if secret != PUSH_SECRET:
+        return jsonify({"error": "Unauthorized"}), 401
     t = threading.Thread(target=_run_job, daemon=True)
     t.start()
     return jsonify({"message": "Refresh triggered."})
