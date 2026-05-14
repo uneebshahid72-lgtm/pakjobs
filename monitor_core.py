@@ -134,11 +134,8 @@ TARGET_DEPTS = {
     ],
 }
 
-# Internship detection
-INTERNSHIP_WORDS = [
-    "intern", "internship", "nesternship", "summer intern",
-    "winter intern", "intern program",
-]
+# Internship detection — use word boundary to avoid matching "international"
+_INTERNSHIP_RE = re.compile(r'(?<!\w)intern(?:ship|s|ed)?\b', re.IGNORECASE)
 
 SENIOR_TITLES = [
     "senior", "sr.", "manager", "head of", "director",
@@ -196,8 +193,8 @@ def _clean(s):
     return s.strip()
 
 def _is_internship(title):
-    t = title.lower()
-    return any(w in t for w in INTERNSHIP_WORDS)
+    """Word-boundary safe internship detection. Won't match 'international'."""
+    return bool(_INTERNSHIP_RE.search(title)) or "nesternship" in title.lower()
 
 def _is_senior(title):
     t = title.lower()
@@ -231,45 +228,51 @@ def _classify_exp(text):
         if phrase in text:
             return "0-1"
 
-    min_lo = None
+    # Use hi for ranges (lo for single mentions) to correctly classify:
+    # "0-1 years" → hi=1 → "0-1"
+    # "1-2 years" → hi=2 → "1-2"
+    # "2-3 years" → hi=3 → reject
+    min_hi = None   # tracks the highest year in the lowest range found
 
     # Range: "1-2 years", "2 to 3 years"
     for m in re.finditer(r'(\d+)\s*(?:[-–]|to)\s*(\d+)\s*year', text):
         if _bypass_ctx(text, m.start()):
             continue
-        lo = int(m.group(1))
-        if min_lo is None or lo < min_lo:
-            min_lo = lo
+        hi = int(m.group(2))
+        if min_hi is None or hi < min_hi:
+            min_hi = hi
 
-    # X+ years of experience
+    # X+ years of experience — treat as minimum = X
     for m in re.finditer(r'(\d+)\s*\+\s*years?\s+(?:of\s+)?(?:\w+\s+){0,3}experience', text):
         if _bypass_ctx(text, m.start()):
             continue
         n = int(m.group(1))
-        if min_lo is None or n < min_lo:
-            min_lo = n
+        # X+ means at least X — use X+1 as effective hi so "1+" → hi=2 → "1-2"
+        hi = n + 1
+        if min_hi is None or hi < min_hi:
+            min_hi = hi
 
     # X years of experience
     for m in re.finditer(r'(\d+)\s*years?\s+(?:of\s+)?(?:\w+\s+){0,3}experience', text):
         if _bypass_ctx(text, m.start()):
             continue
         n = int(m.group(1))
-        if min_lo is None or n < min_lo:
-            min_lo = n
+        if min_hi is None or n < min_hi:
+            min_hi = n
 
     # experience: X
     for m in re.finditer(r'experience[\s\w]{0,20}?:\s*(\d+)', text):
         if _bypass_ctx(text, m.start()):
             continue
         n = int(m.group(1))
-        if min_lo is None or n < min_lo:
-            min_lo = n
+        if min_hi is None or n < min_hi:
+            min_hi = n
 
-    if min_lo is None:
+    if min_hi is None:
         return "unclear"
-    if min_lo <= 1:
+    if min_hi <= 1:
         return "0-1"
-    elif min_lo == 2:
+    elif min_hi <= 2:
         return "1-2"
     else:
         return "reject"   # 3+ years — skip
