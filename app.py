@@ -17,6 +17,16 @@ try:
 except Exception:
     _HAS_SCHEDULER = False
 
+# Database (optional — disabled if DATABASE_URL not set)
+try:
+    import db as _db
+    _db.init_db()
+    _HAS_DB = True
+    log_startup = logging.getLogger(__name__)
+    log_startup.info("Database initialised.")
+except Exception as _db_err:
+    _HAS_DB = False
+
 PUSH_SECRET = os.environ.get("PUSH_SECRET", "pakjobs-secret")
 
 # ── Logging ───────────────────────────────────────────────────────────────────
@@ -124,6 +134,41 @@ def api_push():
         _status = "ready"
     log.info(f"Push received — {body.get('total', 0)} jobs updated.")
     return jsonify({"ok": True, "total": body.get("total", 0)})
+
+
+@app.route("/api/subscribe", methods=["POST"])
+def api_subscribe():
+    """Store a subscriber's email and preferences."""
+    if not _HAS_DB:
+        return jsonify({"error": "Database not configured"}), 503
+
+    body = request.get_json(silent=True) or {}
+    email      = (body.get("email") or "").strip().lower()
+    cities     = body.get("cities", [])
+    depts      = body.get("depts", [])
+    exp_ranges = body.get("exp_ranges", [])
+
+    if not email or "@" not in email:
+        return jsonify({"error": "Invalid email"}), 400
+    if not cities and not depts and not exp_ranges:
+        return jsonify({"error": "Select at least one preference"}), 400
+
+    try:
+        _db.add_subscriber(email, cities, depts, exp_ranges)
+        return jsonify({"ok": True})
+    except Exception as e:
+        log.error(f"Subscribe error: {e}")
+        return jsonify({"error": "Something went wrong"}), 500
+
+
+@app.route("/api/subscriber-count")
+def api_subscriber_count():
+    if not _HAS_DB:
+        return jsonify({"count": 0})
+    try:
+        return jsonify({"count": _db.subscriber_count()})
+    except Exception:
+        return jsonify({"count": 0})
 
 
 # ── Entry ─────────────────────────────────────────────────────────────────────

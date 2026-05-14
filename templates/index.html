@@ -43,6 +43,69 @@
     .logo span { color: var(--text); }
     .tagline { color: var(--muted); font-size: .82rem; flex: 1; }
     #last-updated { font-size: .78rem; color: var(--muted); white-space: nowrap; }
+    .alert-btn {
+      background: var(--accent); color: #fff; border: none; cursor: pointer;
+      font-size: .8rem; font-weight: 600; border-radius: 8px;
+      padding: 8px 16px; white-space: nowrap; transition: opacity var(--transition);
+    }
+    .alert-btn:hover { opacity: .85; }
+
+    /* ── Modal ── */
+    .modal-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.7); z-index: 200;
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; width: 100%; max-width: 540px;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 8px 48px rgba(0,0,0,.6);
+    }
+    .modal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px;
+    }
+    .modal-title { font-size: 1.1rem; font-weight: 700; }
+    .modal-close {
+      background: none; border: none; color: var(--muted); cursor: pointer;
+      font-size: 1.4rem; line-height: 1; padding: 0 4px;
+    }
+    .modal-close:hover { color: var(--text); }
+    .form-group { margin-bottom: 20px; }
+    .form-label {
+      display: block; font-size: .72rem; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
+    }
+    .form-input {
+      width: 100%; background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 10px 14px; color: var(--text);
+      font-size: .9rem; outline: none; transition: border-color var(--transition);
+    }
+    .form-input:focus { border-color: var(--accent); }
+    .check-grid {
+      display: flex; flex-wrap: wrap; gap: 7px;
+    }
+    .check-pill {
+      cursor: pointer; border: 1.5px solid var(--border); border-radius: 999px;
+      padding: 5px 13px; font-size: .78rem; font-weight: 500;
+      color: var(--muted); background: var(--surface);
+      transition: var(--transition); user-select: none;
+    }
+    .check-pill:hover { border-color: var(--accent); color: var(--text); }
+    .check-pill.selected { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .submit-btn {
+      width: 100%; background: var(--accent); color: #fff; border: none;
+      border-radius: 10px; padding: 12px; font-size: .95rem; font-weight: 700;
+      cursor: pointer; transition: opacity var(--transition); margin-top: 8px;
+    }
+    .submit-btn:hover { opacity: .85; }
+    .submit-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .form-msg { text-align: center; font-size: .85rem; margin-top: 12px; min-height: 20px; }
+    .form-msg.success { color: #22c55e; }
+    .form-msg.error   { color: #ef4444; }
 
     /* ── Layout ── */
     main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 64px; }
@@ -240,7 +303,73 @@
   <div class="logo">Pak<span>Jobs</span></div>
   <div class="tagline">Graduate &amp; entry-level roles across Pakistan — updated every 6 hours</div>
   <div id="last-updated">Loading…</div>
+  <button class="alert-btn" onclick="openModal()">🔔 Get Alerts</button>
 </header>
+
+<!-- ── Alert Signup Modal ──────────────────────────────────────────────────── -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🔔 Get Job Alerts</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Your Email</label>
+      <input class="form-input" type="email" id="sub-email" placeholder="you@example.com" />
+    </div>
+
+    <div class="form-group">
+      <div class="form-label">Cities (select all that apply)</div>
+      <div class="check-grid" id="sub-cities">
+        <div class="check-pill" data-val="lahore">Lahore</div>
+        <div class="check-pill" data-val="islamabad">Islamabad</div>
+        <div class="check-pill" data-val="karachi">Karachi</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-label">Departments (select all that apply)</div>
+      <div class="check-grid" id="sub-depts">
+        <div class="check-pill" data-val="Human Resources">Human Resources</div>
+        <div class="check-pill" data-val="Marketing">Marketing</div>
+        <div class="check-pill" data-val="Finance & Accounting">Finance & Accounting</div>
+        <div class="check-pill" data-val="Sales">Sales</div>
+        <div class="check-pill" data-val="Supply Chain & Logistics">Supply Chain & Logistics</div>
+        <div class="check-pill" data-val="Procurement">Procurement</div>
+        <div class="check-pill" data-val="Operations">Operations</div>
+        <div class="check-pill" data-val="Business Development">Business Development</div>
+        <div class="check-pill" data-val="Information Technology">Information Technology</div>
+        <div class="check-pill" data-val="Data & Analytics">Data & Analytics</div>
+        <div class="check-pill" data-val="Customer Service">Customer Service</div>
+        <div class="check-pill" data-val="Public Relations & Communications">PR & Communications</div>
+        <div class="check-pill" data-val="Legal & Compliance">Legal & Compliance</div>
+        <div class="check-pill" data-val="Research & Development">Research & Development</div>
+        <div class="check-pill" data-val="Product Management">Product Management</div>
+        <div class="check-pill" data-val="Quality Assurance">Quality Assurance</div>
+        <div class="check-pill" data-val="Administration">Administration</div>
+        <div class="check-pill" data-val="Training & Development">Training & Development</div>
+        <div class="check-pill" data-val="Risk Management">Risk Management</div>
+        <div class="check-pill" data-val="Strategy & Consulting">Strategy & Consulting</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-label">Experience Level (select all that apply)</div>
+      <div class="check-grid" id="sub-exp">
+        <div class="check-pill" data-val="0-1">0–1 yr (Fresh)</div>
+        <div class="check-pill" data-val="1-2">1–2 yrs</div>
+        <div class="check-pill" data-val="2-3">2–3 yrs</div>
+        <div class="check-pill" data-val="3-4">3–4 yrs</div>
+        <div class="check-pill" data-val="4+">4+ yrs</div>
+        <div class="check-pill" data-val="unclear">Not stated</div>
+      </div>
+    </div>
+
+    <button class="submit-btn" id="sub-btn" onclick="submitSubscribe()">Subscribe</button>
+    <div class="form-msg" id="sub-msg"></div>
+  </div>
+</div>
 
 <main>
 
@@ -508,6 +637,71 @@ function startPoll(ms, fast = false) {
 }
 
 startPoll(5000, true);
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal()  { document.getElementById("modal-backdrop").classList.add("open"); }
+function closeModal() { document.getElementById("modal-backdrop").classList.remove("open"); }
+function closeModalOutside(e) { if (e.target === document.getElementById("modal-backdrop")) closeModal(); }
+
+// Toggle check-pills
+document.querySelectorAll(".check-pill").forEach(pill => {
+  pill.addEventListener("click", () => pill.classList.toggle("selected"));
+});
+
+function getSelected(containerId) {
+  return [...document.querySelectorAll(`#${containerId} .check-pill.selected`)]
+    .map(p => p.dataset.val);
+}
+
+async function submitSubscribe() {
+  const email = document.getElementById("sub-email").value.trim();
+  const cities     = getSelected("sub-cities");
+  const depts      = getSelected("sub-depts");
+  const exp_ranges = getSelected("sub-exp");
+  const msg = document.getElementById("sub-msg");
+  const btn = document.getElementById("sub-btn");
+
+  msg.className = "form-msg";
+  msg.textContent = "";
+
+  if (!email || !email.includes("@")) {
+    msg.className = "form-msg error";
+    msg.textContent = "Please enter a valid email.";
+    return;
+  }
+  if (!cities.length && !depts.length && !exp_ranges.length) {
+    msg.className = "form-msg error";
+    msg.textContent = "Please select at least one preference.";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Subscribing...";
+
+  try {
+    const res  = await fetch("/api/subscribe", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ email, cities, depts, exp_ranges }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      msg.className = "form-msg success";
+      msg.textContent = "✓ You're subscribed! We'll notify you when new jobs drop.";
+      btn.textContent = "Subscribed ✓";
+    } else {
+      msg.className = "form-msg error";
+      msg.textContent = data.error || "Something went wrong.";
+      btn.disabled = false;
+      btn.textContent = "Subscribe";
+    }
+  } catch {
+    msg.className = "form-msg error";
+    msg.textContent = "Network error. Please try again.";
+    btn.disabled = false;
+    btn.textContent = "Subscribe";
+  }
+}
 </script>
 </body>
 </html>
