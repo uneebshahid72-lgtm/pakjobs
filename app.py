@@ -131,7 +131,13 @@ def api_push():
     if not body or "jobs" not in body:
         return jsonify({"error": "Invalid payload"}), 400
     with _lock:
-        _data   = body
+        # Normalise keys so /api/jobs never gets a KeyError regardless of payload shape
+        _data = {
+            "jobs":        body.get("jobs", []),
+            "internships": body.get("internships", []),
+            "run_at":      body.get("run_at"),
+            "total":       body.get("total", 0),
+        }
         _status = "ready"
     log.info(f"Push received — {body.get('total', 0)} jobs updated.")
     return jsonify({"ok": True, "total": body.get("total", 0)})

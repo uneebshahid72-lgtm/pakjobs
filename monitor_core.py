@@ -163,7 +163,9 @@ GOOD_EXP_PHRASES = [
     "entry level", "entry-level", "0 year", "less than 1 year",
     "up to 1 year", "within 1 year", "management trainee",
     "graduate program", "trainee program", "final year student",
-    "new graduate", "no work experience", "internship",
+    "new graduate", "no work experience",
+    # NOTE: "internship" removed — internship detection is handled by _is_internship()
+    # Leaving it here caused any JD mentioning "internship" to short-circuit to "0-1"
 ]
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -194,7 +196,7 @@ def _clean(s):
 
 def _is_internship(title):
     """Word-boundary safe internship detection. Won't match 'international'."""
-    return bool(_INTERNSHIP_RE.search(title)) or "nesternship" in title.lower()
+    return bool(_INTERNSHIP_RE.search(title))
 
 def _is_senior(title):
     t = title.lower()
@@ -292,11 +294,12 @@ def _fetch_listings(keyword, max_pages=10, exp_filter="1%2C2"):
         if not html.strip():
             break
 
-        titles    = re.findall(r'class="sr-only">\s*(.*?)\s*</span>', html, re.DOTALL)
-        # Try multiple patterns for company name
-        companies = re.findall(r'class="hidden-nested-link">\s*(.*?)\s*</a>', html, re.DOTALL)
-        if not companies:
-            companies = re.findall(r'class="base-search-card__subtitle"[^>]*>\s*(.*?)\s*</[^>]+>', html, re.DOTALL)
+        titles     = re.findall(r'class="sr-only">\s*(.*?)\s*</span>', html, re.DOTALL)
+        # Try both company patterns and use whichever returns more results.
+        # LinkedIn sometimes uses different classes on different result pages.
+        companies1 = re.findall(r'class="hidden-nested-link">\s*(.*?)\s*</a>', html, re.DOTALL)
+        companies2 = re.findall(r'class="base-search-card__subtitle"[^>]*>\s*(.*?)\s*</[^>]+>', html, re.DOTALL)
+        companies  = companies1 if len(companies1) >= len(companies2) else companies2
         locations = re.findall(r'job-search-card__location">\s*(.*?)\s*</span>', html)
         links     = re.findall(r'href="(https://[a-z]+\.linkedin\.com/jobs/view/[^"]+)"', html)
         job_ids   = re.findall(r'data-entity-urn="urn:li:jobPosting:(\d+)"', html)
@@ -504,8 +507,8 @@ def run_monitor(log=print):
         # Department detection — title only for accuracy
         depts = _detect_dept(title)
         if not depts:
-            # Fallback: check first 200 chars of JD
-            jd_snippet = jd[:200]
+            # Fallback: check first 600 chars of JD (200 was too short for multi-word phrases)
+            jd_snippet = jd[:600]
             depts = []
             for dept, kws in TARGET_DEPTS.items():
                 if any(kw in jd_snippet for kw in kws):

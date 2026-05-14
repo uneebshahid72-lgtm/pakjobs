@@ -376,9 +376,6 @@
       <div class="check-grid" id="sub-exp">
         <div class="check-pill" data-val="0-1">0–1 yr (Fresh)</div>
         <div class="check-pill" data-val="1-2">1–2 yrs</div>
-        <div class="check-pill" data-val="2-3">2–3 yrs</div>
-        <div class="check-pill" data-val="3-4">3–4 yrs</div>
-        <div class="check-pill" data-val="4+">4+ yrs</div>
         <div class="check-pill" data-val="unclear">Not stated</div>
       </div>
     </div>
@@ -633,7 +630,9 @@ setupPills("exp-pills",  v => { activeExp  = v; renderJobs(); });
 setupPills("city-pills", v => { activeCity = v; renderJobs(); });
 
 // ── Polling ───────────────────────────────────────────────────────────────────
-let pollInterval = null;
+// Use an object so we can track the "fast" flag alongside the interval ID.
+// (setInterval returns a primitive number — properties on primitives silently drop.)
+const pollState = { id: null, fast: false };
 
 async function fetchJobs() {
   try { return await (await fetch("/api/jobs")).json(); }
@@ -684,14 +683,18 @@ async function poll() {
     data.run_at ? `Updated: ${data.run_at}` : "";
   renderJobs();
 
-  if (pollInterval && pollInterval._fast) { stopPoll(); startPoll(60000); }
+  // Once data is ready, switch from fast (5s) polling to slow (60s) polling
+  if (pollState.fast) { stopPoll(); startPoll(60000, false); }
 }
 
-function stopPoll() { if (pollInterval) { clearInterval(pollInterval); pollInterval = null; } }
+function stopPoll() {
+  if (pollState.id !== null) { clearInterval(pollState.id); pollState.id = null; }
+}
 function startPoll(ms, fast = false) {
-  stopPoll(); poll();
-  pollInterval = setInterval(poll, ms);
-  pollInterval._fast = fast;
+  stopPoll();
+  pollState.fast = fast;
+  poll();
+  pollState.id = setInterval(poll, ms);
 }
 
 startPoll(5000, true);
