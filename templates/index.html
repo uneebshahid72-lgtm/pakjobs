@@ -158,12 +158,10 @@
     .pill[data-dept="Strategy & Consulting"].active     { background:#6d28d9; border-color:#6d28d9; }
 
     /* Exp pill active colours */
-    .pill[data-exp="0-1"].active   { background:#22c55e; border-color:#22c55e; }
-    .pill[data-exp="1-2"].active   { background:#84cc16; border-color:#84cc16; }
-    .pill[data-exp="2-3"].active   { background:#eab308; border-color:#eab308; color:#000; }
-    .pill[data-exp="3-4"].active   { background:#f97316; border-color:#f97316; }
-    .pill[data-exp="4+"].active    { background:#ef4444; border-color:#ef4444; }
-    .pill[data-exp="unclear"].active { background:#64748b; border-color:#64748b; }
+    .pill[data-exp="0-1"].active        { background:#22c55e; border-color:#22c55e; }
+    .pill[data-exp="1-2"].active        { background:#84cc16; border-color:#84cc16; }
+    .pill[data-exp="unclear"].active    { background:#64748b; border-color:#64748b; }
+    .pill[data-exp="internship"].active { background:#a855f7; border-color:#a855f7; }
 
     /* ── Stats bar ── */
     .stats-bar {
@@ -423,6 +421,7 @@
       <div class="pill" data-exp="0-1">0–1 yr (Fresh)</div>
       <div class="pill" data-exp="1-2">1–2 yrs</div>
       <div class="pill" data-exp="unclear">Not stated</div>
+      <div class="pill" data-exp="internship">🎓 Internship</div>
     </div>
   </div>
 
@@ -565,7 +564,10 @@ function makeCard(job, idx) {
 function applyFilters(jobs) {
   return jobs.filter(job => {
     const deptOk = activeDept === "All" || (job.departments || []).includes(activeDept);
-    const expOk  = activeExp  === "All" || job.exp_range === activeExp;
+    let expOk;
+    if      (activeExp === "All")        expOk = true;
+    else if (activeExp === "internship") expOk = job.is_internship === true;
+    else                                 expOk = job.exp_range === activeExp;
     const cityOk = activeCity === "All" || job.location.toLowerCase().includes(activeCity);
     return deptOk && expOk && cityOk;
   });
