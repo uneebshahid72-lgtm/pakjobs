@@ -583,7 +583,11 @@ function renderJobs() {
   intGrid.innerHTML = "";
 
   const filteredJobs = applyFilters(allJobs);
-  const filteredInts = applyFilters(allInternships);
+  // Internship section only appears on "All levels" or the dedicated "🎓 Internship" pill.
+  // When a specific exp level (0-1, 1-2, unclear) is chosen, internships are hidden —
+  // they have their own filter and shouldn't bleed through via their exp_range value.
+  const showInternships = (activeExp === "All" || activeExp === "internship");
+  const filteredInts = showInternships ? applyFilters(allInternships) : [];
   const total = filteredJobs.length + filteredInts.length;
 
   document.getElementById("stats-count").innerHTML =

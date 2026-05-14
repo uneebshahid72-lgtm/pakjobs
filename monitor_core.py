@@ -6,6 +6,7 @@ Returns data instead of printing.
 import subprocess
 import re
 import time
+import html as _html_lib
 import urllib.parse
 import xml.etree.ElementTree as ET
 from datetime import datetime
@@ -192,12 +193,10 @@ def _html_to_text(html):
     return re.sub(r"\s+", " ", text).lower()
 
 def _clean(s):
-    """Clean HTML entities and whitespace from a string."""
-    s = re.sub(r"&amp;", "&", s)
-    s = re.sub(r"&lt;", "<", s)
-    s = re.sub(r"&gt;", ">", s)
-    s = re.sub(r"&#\d+;", "", s)
-    return s.strip()
+    """Decode all HTML entities (named, decimal &#39;, hex &#x27;) and trim whitespace.
+    The old manual regex only handled a few decimal entities and deleted rather than
+    converted them — e.g. "O&#39;Brien" became "OBrien" instead of "O'Brien"."""
+    return _html_lib.unescape(s).strip()
 
 def _is_internship(title):
     """Word-boundary safe internship detection. Won't match 'international'."""
