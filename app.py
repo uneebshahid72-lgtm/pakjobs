@@ -38,7 +38,7 @@ app = Flask(__name__)
 
 # ── Shared state ──────────────────────────────────────────────────────────────
 _lock       = threading.Lock()
-_data       = {"jobs": [], "run_at": None, "total": 0}
+_data       = {"jobs": [], "internships": [], "run_at": None, "total": 0}
 _status     = "loading"   # "loading" | "ready" | "error"
 _log_lines  = []          # last N log lines for /api/status
 
@@ -87,10 +87,11 @@ def index():
 def api_jobs():
     with _lock:
         payload = {
-            "status":  _status,
-            "run_at":  _data["run_at"],
-            "total":   _data["total"],
-            "jobs":    _data["jobs"],
+            "status":      _status,
+            "run_at":      _data["run_at"],
+            "total":       _data["total"],
+            "jobs":        _data["jobs"],
+            "internships": _data["internships"],
         }
     return jsonify(payload)
 

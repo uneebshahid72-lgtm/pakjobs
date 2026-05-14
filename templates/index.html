@@ -281,6 +281,23 @@
     }
     #log-box p { margin-bottom:2px; }
 
+    /* ── Section header ── */
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin: 32px 0 16px;
+    }
+    .section-title {
+      font-size: 1rem; font-weight: 700; color: var(--text);
+    }
+    .section-count {
+      font-size: .78rem; color: var(--muted);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; padding: 2px 10px;
+    }
+    .section-divider {
+      flex: 1; height: 1px; background: var(--border);
+    }
+
     /* ── Empty state ── */
     #empty-state {
       display:none; flex-direction:column; align-items:center;
@@ -408,9 +425,6 @@
       <div class="pill active" data-exp="All">All levels</div>
       <div class="pill" data-exp="0-1">0–1 yr (Fresh)</div>
       <div class="pill" data-exp="1-2">1–2 yrs</div>
-      <div class="pill" data-exp="2-3">2–3 yrs</div>
-      <div class="pill" data-exp="3-4">3–4 yrs</div>
-      <div class="pill" data-exp="4+">4+ yrs</div>
       <div class="pill" data-exp="unclear">Not stated</div>
     </div>
   </div>
@@ -448,6 +462,23 @@
     <div class="state-sub">Try clearing a filter or check back after the next scan.</div>
   </div>
 
+  <!-- Internship section -->
+  <div id="internship-section" style="display:none">
+    <div class="section-header">
+      <div class="section-title">🎓 Internships</div>
+      <div class="section-count" id="internship-count">0</div>
+      <div class="section-divider"></div>
+    </div>
+    <div id="internship-grid" class="job-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:16px;"></div>
+  </div>
+
+  <!-- Jobs section -->
+  <div class="section-header" id="jobs-header" style="display:none">
+    <div class="section-title">💼 Jobs</div>
+    <div class="section-count" id="jobs-section-count">0</div>
+    <div class="section-divider"></div>
+  </div>
+
   <!-- Job grid -->
   <div id="job-grid"></div>
 
@@ -455,10 +486,11 @@
 
 <script>
 // ── State ─────────────────────────────────────────────────────────────────────
-let allJobs    = [];
-let activeDept = "All";
-let activeExp  = "All";
-let activeCity = "All";
+let allJobs        = [];
+let allInternships = [];
+let activeDept     = "All";
+let activeExp      = "All";
+let activeCity     = "All";
 
 // ── Dept → chip CSS class map ─────────────────────────────────────────────────
 const deptChip = {
@@ -501,56 +533,81 @@ function expLabel(range) {
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────
+function makeCard(job, idx) {
+  const depts = job.departments || [];
+  const expR  = job.exp_range || "unclear";
+  const card  = document.createElement("div");
+  card.className = "job-card";
+  card.style.animationDelay = `${Math.min(idx * 0.035, 0.5)}s`;
+
+  const chipHTML = depts.map(d =>
+    `<span class="dept-chip ${deptChip[d] || ''}">${escHtml(d)}</span>`
+  ).join("");
+
+  const locIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>`;
+  const bldIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`;
+
+  card.innerHTML = `
+    <div class="card-top">
+      <div class="job-title">${escHtml(job.title)}</div>
+      <div class="exp-badge ${expClass(expR)}">${expLabel(expR)}</div>
+    </div>
+    <div class="job-meta">
+      <div class="meta-row">${bldIcon} ${escHtml(job.company)}</div>
+      <div class="meta-row">${locIcon} ${escHtml(job.location)}</div>
+    </div>
+    <div class="dept-chips">${chipHTML}</div>
+    <div class="card-footer">
+      <span class="source-badge">${escHtml(job.source)}</span>
+      ${job.link ? `<a class="apply-btn" href="${escHtml(job.link)}" target="_blank" rel="noopener">View Job →</a>` : ''}
+    </div>
+  `;
+  return card;
+}
+
+function applyFilters(jobs) {
+  return jobs.filter(job => {
+    const deptOk = activeDept === "All" || (job.departments || []).includes(activeDept);
+    const expOk  = activeExp  === "All" || job.exp_range === activeExp;
+    const cityOk = activeCity === "All" || job.location.toLowerCase().includes(activeCity);
+    return deptOk && expOk && cityOk;
+  });
+}
+
 function renderJobs() {
   const grid  = document.getElementById("job-grid");
   const empty = document.getElementById("empty-state");
+  const intGrid   = document.getElementById("internship-grid");
+  const intSection = document.getElementById("internship-section");
+  const jobsHeader = document.getElementById("jobs-header");
   grid.innerHTML = "";
+  intGrid.innerHTML = "";
 
-  const filtered = allJobs.filter(job => {
-    const deptOk = activeDept === "All" || (job.departments || []).includes(activeDept);
-    const expOk  = activeExp  === "All" || job.exp_range === activeExp;
-    const cityOk = activeCity === "All" ||
-                   job.location.toLowerCase().includes(activeCity);
-    return deptOk && expOk && cityOk;
-  });
+  const filteredJobs = applyFilters(allJobs);
+  const filteredInts = applyFilters(allInternships);
+  const total = filteredJobs.length + filteredInts.length;
 
   document.getElementById("stats-count").innerHTML =
-    `<strong>${filtered.length}</strong> job${filtered.length !== 1 ? "s" : ""} found`;
+    `<strong>${total}</strong> result${total !== 1 ? "s" : ""} found`;
 
-  if (filtered.length === 0) { empty.classList.add("visible"); return; }
+  if (total === 0) { empty.classList.add("visible"); intSection.style.display="none"; jobsHeader.style.display="none"; return; }
   empty.classList.remove("visible");
 
-  filtered.forEach((job, idx) => {
-    const depts   = job.departments || [];
-    const expR    = job.exp_range || "unclear";
-    const card    = document.createElement("div");
-    card.className = "job-card";
-    card.style.animationDelay = `${Math.min(idx * 0.035, 0.5)}s`;
+  // Internships
+  if (filteredInts.length > 0) {
+    intSection.style.display = "block";
+    document.getElementById("internship-count").textContent = filteredInts.length;
+    filteredInts.forEach((job, idx) => intGrid.appendChild(makeCard(job, idx)));
+  } else {
+    intSection.style.display = "none";
+  }
 
-    const chipHTML = depts.map(d =>
-      `<span class="dept-chip ${deptChip[d] || ''}">${escHtml(d)}</span>`
-    ).join("");
-
-    const locIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>`;
-    const bldIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`;
-
-    card.innerHTML = `
-      <div class="card-top">
-        <div class="job-title">${escHtml(job.title)}</div>
-        <div class="exp-badge ${expClass(expR)}">${expLabel(expR)}</div>
-      </div>
-      <div class="job-meta">
-        <div class="meta-row">${bldIcon} ${escHtml(job.company)}</div>
-        <div class="meta-row">${locIcon} ${escHtml(job.location)}</div>
-      </div>
-      <div class="dept-chips">${chipHTML}</div>
-      <div class="card-footer">
-        <span class="source-badge">${escHtml(job.source)}</span>
-        ${job.link ? `<a class="apply-btn" href="${escHtml(job.link)}" target="_blank" rel="noopener">View Job →</a>` : ''}
-      </div>
-    `;
-    grid.appendChild(card);
-  });
+  // Jobs
+  if (filteredJobs.length > 0) {
+    jobsHeader.style.display = filteredInts.length > 0 ? "flex" : "none";
+    document.getElementById("jobs-section-count").textContent = filteredJobs.length;
+    filteredJobs.forEach((job, idx) => grid.appendChild(makeCard(job, idx)));
+  }
 }
 
 function escHtml(str) {
@@ -621,7 +678,8 @@ async function poll() {
   }
 
   hideOverlay();
-  allJobs = data.jobs || [];
+  allJobs        = data.jobs || [];
+  allInternships = data.internships || [];
   document.getElementById("last-updated").textContent =
     data.run_at ? `Updated: ${data.run_at}` : "";
   renderJobs();

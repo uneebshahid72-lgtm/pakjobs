@@ -22,104 +22,123 @@ TARGET_DEPTS = {
         "recruiter", "payroll", "workforce planning",
     ],
     "Marketing": [
-        "marketing", "brand", "digital marketing", "social media",
-        "content marketing", "content writer", "campaign", "trade marketing",
-        "corporate communications", "seo", "growth marketing", "advertising",
-        "media planning", "copywriter", "email marketing",
+        "marketing associate", "marketing coordinator", "marketing executive",
+        "marketing officer", "marketing analyst", "brand associate",
+        "brand coordinator", "digital marketing", "social media manager",
+        "social media coordinator", "content marketing", "content writer",
+        "campaign manager", "trade marketing", "seo specialist",
+        "growth marketing", "email marketing", "media planner", "copywriter",
     ],
     "Finance & Accounting": [
-        "finance", "financial", "accounting", "accountant", "accounts",
-        "audit", "auditor", "tax", "treasury", "credit", "fp&a",
-        "financial analyst", "financial associate", "financial officer",
-        "accounts officer", "accounts executive", "finance executive",
+        "finance associate", "finance executive", "finance officer",
+        "finance analyst", "financial analyst", "financial associate",
+        "accounts officer", "accounts executive", "accounts associate",
+        "accountant", "audit associate", "audit officer", "tax associate",
+        "treasury associate", "fp&a analyst",
     ],
     "Sales": [
-        "sales", "account executive", "sales coordinator", "sales associate",
-        "sales executive", "sales officer", "sales analyst", "sales representative",
-        "sales development", "inside sales", "field sales",
+        "sales associate", "sales coordinator", "sales executive",
+        "sales officer", "sales analyst", "sales representative",
+        "sales development", "inside sales", "field sales executive",
+        "account executive", "sales trainee",
     ],
     "Supply Chain & Logistics": [
-        "supply chain", "logistics", "warehouse", "inventory", "distribution",
-        "demand planning", "imports", "exports", "freight", "customs",
-        "supply planning", "materials management",
+        "supply chain associate", "supply chain coordinator", "supply chain analyst",
+        "supply chain officer", "logistics coordinator", "logistics associate",
+        "logistics officer", "warehouse associate", "inventory associate",
+        "distribution coordinator", "demand planning", "supply planning",
+        "imports coordinator", "exports coordinator", "freight coordinator",
+        "materials management",
     ],
     "Procurement": [
-        "procurement", "purchasing", "sourcing", "vendor management",
-        "category management", "buyer", "procurement associate",
-        "procurement officer", "procurement executive",
+        "procurement associate", "procurement officer", "procurement executive",
+        "procurement analyst", "purchasing associate", "purchasing officer",
+        "sourcing associate", "sourcing specialist", "vendor management",
+        "category associate", "buyer",
     ],
     "Operations": [
-        "management trainee", "graduate trainee", "mto", "future leaders",
-        "trainee program", "business operations", "operations associate",
-        "operations analyst", "operations coordinator", "operations executive",
-        "operations officer", "project coordinator", "project associate",
+        "management trainee", "graduate trainee", "mto",
+        "future leaders program", "trainee officer",
+        "operations associate", "operations analyst", "operations coordinator",
+        "operations executive", "operations officer",
+        "project coordinator", "project associate",
     ],
     "Business Development": [
-        "business development", "partnerships", "alliances",
-        "bd associate", "bd coordinator", "bd executive", "bd analyst",
-        "growth associate", "expansion",
+        "business development associate", "business development executive",
+        "business development analyst", "bd associate", "bd coordinator",
+        "bd executive", "growth associate", "partnerships associate",
     ],
     "Information Technology": [
-        "software", "developer", "engineer", "devops", "cloud",
-        "database", "network", "cyber", "mobile app", "web developer",
-        "system admin", "infrastructure", "it support", "technical support",
-        "qa engineer", "sqa", "data engineer",
+        "software engineer", "software developer", "web developer",
+        "mobile developer", "android developer", "ios developer",
+        "frontend developer", "backend developer", "full stack developer",
+        "devops engineer", "cloud engineer", "data engineer",
+        "network engineer", "system administrator", "it support",
+        "technical support", "qa engineer", "sqa engineer",
     ],
     "Data & Analytics": [
-        "data analyst", "business intelligence", "bi analyst",
-        "data analytics", "insights analyst", "reporting analyst",
-        "data associate", "analytics associate", "data science",
-        "machine learning", "ai analyst",
+        "data analyst", "business analyst", "business intelligence analyst",
+        "bi analyst", "data analytics", "insights analyst",
+        "reporting analyst", "data associate", "analytics associate",
+        "data scientist", "machine learning engineer",
     ],
     "Customer Service": [
-        "customer service", "customer support", "customer experience",
-        "customer care", "client relations", "client services",
-        "customer success", "customer relations",
+        "customer service associate", "customer service executive",
+        "customer service officer", "customer support associate",
+        "customer experience associate", "customer care associate",
+        "client relations associate", "client services associate",
+        "customer success associate",
     ],
     "Public Relations & Communications": [
-        "public relations", "pr manager", "pr executive", "pr associate",
-        "corporate communications", "media relations", "communications officer",
-        "communications associate", "press",
+        "public relations associate", "pr associate", "pr executive",
+        "corporate communications associate", "communications officer",
+        "communications associate", "media relations associate",
     ],
     "Legal & Compliance": [
-        "legal", "compliance", "regulatory", "attorney", "lawyer",
-        "paralegal", "legal associate", "legal officer", "legal executive",
-        "compliance officer", "compliance associate",
+        "legal associate", "legal officer", "legal executive",
+        "compliance associate", "compliance officer", "regulatory associate",
+        "paralegal", "legal trainee",
     ],
     "Research & Development": [
-        "research", "r&d", "product development", "innovation",
-        "research analyst", "research associate", "research officer",
-        "lab", "clinical",
+        "research associate", "research analyst", "research officer",
+        "r&d associate", "product development associate",
+        "innovation associate", "lab associate",
     ],
     "Product Management": [
-        "product manager", "product associate", "product analyst",
-        "product coordinator", "product owner", "product executive",
+        "product associate", "product analyst", "product coordinator",
+        "product executive", "product manager", "product owner",
     ],
     "Quality Assurance": [
-        "quality assurance", "quality control", "qa analyst",
-        "quality analyst", "quality coordinator", "qc analyst",
-        "quality officer", "quality executive",
+        "quality assurance associate", "quality control associate",
+        "qa analyst", "quality analyst", "quality coordinator",
+        "qc analyst", "quality officer",
     ],
     "Administration": [
-        "admin", "administration", "administrative", "office manager",
-        "executive assistant", "personal assistant", "secretary",
-        "administrative officer", "administrative associate",
+        "administrative associate", "administrative officer",
+        "admin associate", "office coordinator", "executive assistant",
+        "personal assistant", "administrative coordinator",
     ],
     "Training & Development": [
-        "training", "learning & development", "l&d",
-        "organizational development", "talent development",
-        "learning coordinator", "training coordinator",
+        "training coordinator", "learning & development associate",
+        "l&d associate", "training associate", "learning coordinator",
+        "talent development associate", "organizational development",
     ],
     "Risk Management": [
         "risk analyst", "risk associate", "risk coordinator",
-        "risk management", "risk officer", "risk executive",
+        "risk officer", "risk executive",
     ],
     "Strategy & Consulting": [
-        "strategy", "consultant", "consulting", "strategic planning",
-        "corporate strategy", "management consultant",
-        "strategy associate", "strategy analyst",
+        "strategy associate", "strategy analyst", "strategy consultant",
+        "management consultant", "consulting associate",
+        "strategic planning associate", "corporate strategy",
     ],
 }
+
+# Internship detection
+INTERNSHIP_WORDS = [
+    "intern", "internship", "nesternship", "summer intern",
+    "winter intern", "intern program",
+]
 
 SENIOR_TITLES = [
     "senior", "sr.", "manager", "head of", "director",
@@ -132,8 +151,9 @@ _EXACT_SENIOR_RE = re.compile(r'(?<!\w)(?:ceo|cfo|coo|cto|vp|lead|sr)(?!\w)')
 
 BYPASS_CONTEXT = [
     "year of study", "years of study", "year of coursework", "years of coursework",
-    "year of undergraduate", "years of undergraduate", "year student", "years of college",
-    "year of program", "years of program", "academic year", "year of education",
+    "year of undergraduate", "years of undergraduate", "year student",
+    "years of college", "year of program", "years of program",
+    "academic year", "year of education",
     "years ago", "year ago", "in the past", "for the past", "over the past",
     "in the last", "for the last", "over the last",
     "founded", "established", "since our", "we have been",
@@ -146,7 +166,7 @@ GOOD_EXP_PHRASES = [
     "entry level", "entry-level", "0 year", "less than 1 year",
     "up to 1 year", "within 1 year", "management trainee",
     "graduate program", "trainee program", "final year student",
-    "new graduate", "no work experience",
+    "new graduate", "no work experience", "internship",
 ]
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -167,20 +187,30 @@ def _html_to_text(html):
     text = re.sub(r"<[^>]+>", " ", html)
     return re.sub(r"\s+", " ", text).lower()
 
+def _clean(s):
+    """Clean HTML entities and whitespace from a string."""
+    s = re.sub(r"&amp;", "&", s)
+    s = re.sub(r"&lt;", "<", s)
+    s = re.sub(r"&gt;", ">", s)
+    s = re.sub(r"&#\d+;", "", s)
+    return s.strip()
+
+def _is_internship(title):
+    t = title.lower()
+    return any(w in t for w in INTERNSHIP_WORDS)
+
 def _is_senior(title):
     t = title.lower()
     if _EXACT_SENIOR_RE.search(t): return True
     if any(kw in t for kw in SENIOR_TITLES): return True
     return False
 
-def _detect_dept(title, jd_snippet=""):
+def _detect_dept(title):
+    """Match department from job title only — strict, no JD guessing."""
     t = title.lower()
-    s = jd_snippet[:300].lower()
     matched = []
     for dept, kws in TARGET_DEPTS.items():
         if any(kw in t for kw in kws):
-            matched.append(dept)
-        elif s and any(kw in s for kw in kws):
             matched.append(dept)
     return matched or None
 
@@ -190,8 +220,8 @@ def _bypass_ctx(text, pos, window=40):
 
 def _classify_exp(text):
     """
-    Returns one of: '0-1', '1-2', '2-3', '3-4', '4+', 'unclear'
-    based on the lowest experience requirement found in the JD.
+    Returns '0-1', '1-2', or 'unclear'.
+    Jobs requiring 2+ years are returned as 'reject'.
     """
     if not text or len(text) < 100:
         return "unclear"
@@ -241,37 +271,42 @@ def _classify_exp(text):
         return "0-1"
     elif min_lo == 2:
         return "1-2"
-    elif min_lo == 3:
-        return "2-3"
-    elif min_lo == 4:
-        return "3-4"
     else:
-        return "4+"
+        return "reject"   # 3+ years — skip
 
 # ── LinkedIn ──────────────────────────────────────────────────────────────────
 
-def _fetch_listings(keyword, max_pages=5):
+def _fetch_listings(keyword, max_pages=10, exp_filter="1%2C2"):
+    """Fetch up to max_pages*10 LinkedIn job listings."""
     jobs = []
     for page in range(max_pages):
         url = (
             "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search"
-            f"?keywords={urllib.parse.quote_plus(keyword)}&location=Pakistan&f_E=1%2C2&start={page*10}"
+            f"?keywords={urllib.parse.quote_plus(keyword)}"
+            f"&location=Pakistan&f_E={exp_filter}&start={page*10}"
         )
         html = _curl(url)
         if not html.strip():
             break
+
         titles    = re.findall(r'class="sr-only">\s*(.*?)\s*</span>', html, re.DOTALL)
+        # Try multiple patterns for company name
         companies = re.findall(r'class="hidden-nested-link">\s*(.*?)\s*</a>', html, re.DOTALL)
+        if not companies:
+            companies = re.findall(r'class="base-search-card__subtitle"[^>]*>\s*(.*?)\s*</[^>]+>', html, re.DOTALL)
         locations = re.findall(r'job-search-card__location">\s*(.*?)\s*</span>', html)
         links     = re.findall(r'href="(https://[a-z]+\.linkedin\.com/jobs/view/[^"]+)"', html)
         job_ids   = re.findall(r'data-entity-urn="urn:li:jobPosting:(\d+)"', html)
+
         if not titles:
             break
+
         for i, title in enumerate(titles):
+            company = _clean(companies[i]) if i < len(companies) else ""
             jobs.append({
                 "id":       job_ids[i] if i < len(job_ids) else f"li_{page}_{i}",
-                "title":    re.sub(r"&amp;", "&", title.strip()),
-                "company":  companies[i].strip() if i < len(companies) else "Unknown",
+                "title":    _clean(title),
+                "company":  company if company else "Unknown",
                 "location": locations[i].strip() if i < len(locations) else "Pakistan",
                 "link":     links[i].split("?")[0] if i < len(links) else "",
                 "source":   "LinkedIn",
@@ -279,7 +314,7 @@ def _fetch_listings(keyword, max_pages=5):
     return jobs
 
 def _get_linkedin_jobs():
-    keywords = [
+    keywords_regular = [
         # General fresh grad
         "management trainee Pakistan", "graduate trainee Pakistan",
         "MTO Pakistan", "fresh graduate Pakistan", "entry level Pakistan",
@@ -289,24 +324,24 @@ def _get_linkedin_jobs():
         # Marketing
         "marketing associate Pakistan", "marketing coordinator Pakistan",
         "digital marketing Pakistan", "social media Pakistan", "trade marketing Pakistan",
+        "brand associate Pakistan",
         # Finance
         "finance associate Pakistan", "accounts officer Pakistan",
         "financial analyst Pakistan", "audit associate Pakistan",
         # Sales
-        "sales associate Pakistan", "sales coordinator Pakistan",
-        "sales executive Pakistan",
+        "sales associate Pakistan", "sales executive Pakistan",
         # Supply Chain
-        "supply chain Pakistan", "logistics coordinator Pakistan",
-        "procurement Pakistan", "demand planning Pakistan",
+        "supply chain associate Pakistan", "logistics coordinator Pakistan",
+        "procurement associate Pakistan", "demand planning Pakistan",
         # IT & Data
         "software engineer Pakistan", "data analyst Pakistan",
-        "business analyst Pakistan", "it associate Pakistan",
-        # Operations / Business Development
-        "business development Pakistan", "operations associate Pakistan",
+        "business analyst Pakistan",
+        # Operations / BD
+        "business development associate Pakistan", "operations associate Pakistan",
         # Customer Service
         "customer service Pakistan", "customer support Pakistan",
-        # Strategy / Consulting
-        "strategy associate Pakistan", "consultant Pakistan",
+        # Strategy
+        "strategy associate Pakistan",
         # Top MNCs
         "Unilever Pakistan graduate", "Nestle Pakistan trainee",
         "P&G Pakistan graduate", "Engro Pakistan graduate",
@@ -314,11 +349,28 @@ def _get_linkedin_jobs():
         "Jazz Pakistan trainee", "Telenor Pakistan graduate",
         "BAT Pakistan trainee", "Colgate Pakistan", "GSK Pakistan graduate",
     ]
+
+    keywords_internship = [
+        "internship Pakistan", "intern Pakistan",
+        "summer internship Pakistan", "internship 2025 Pakistan",
+        "internship 2026 Pakistan", "internship Lahore",
+        "internship Karachi", "internship Islamabad",
+    ]
+
     all_jobs = {}
-    for kw in keywords:
-        for job in _fetch_listings(kw, max_pages=5):
+
+    # Regular entry-level jobs (f_E=1%2C2 = Internship + Entry Level)
+    for kw in keywords_regular:
+        for job in _fetch_listings(kw, max_pages=10, exp_filter="1%2C2"):
             all_jobs[job["id"]] = job
         time.sleep(0.5)
+
+    # Internship-specific search (f_E=1 = Internship only)
+    for kw in keywords_internship:
+        for job in _fetch_listings(kw, max_pages=10, exp_filter="1"):
+            all_jobs[job["id"]] = job
+        time.sleep(0.5)
+
     return list(all_jobs.values())
 
 # ── Nestle RSS ────────────────────────────────────────────────────────────────
@@ -327,6 +379,7 @@ def _get_nestle_jobs():
     feeds = [
         "https://jobdetails.nestle.com/services/rss/job/?locale=en_US&keywords=management+trainee+pakistan",
         "https://jobdetails.nestle.com/services/rss/job/?locale=en_US&keywords=pakistan+graduate+trainee",
+        "https://jobdetails.nestle.com/services/rss/job/?locale=en_US&keywords=pakistan+intern",
     ]
     seen_ids, jobs = set(), []
     for url in feeds:
@@ -357,6 +410,7 @@ def _get_unilever_jobs():
     feeds = [
         "https://careers.unilever.com/rss/jobs?country=Pakistan",
         "https://careers.unilever.com/rss/jobs?keyword=trainee&country=Pakistan",
+        "https://careers.unilever.com/rss/jobs?keyword=intern&country=Pakistan",
     ]
     seen_ids, jobs = set(), []
     for url in feeds:
@@ -387,9 +441,9 @@ def _get_unilever_jobs():
 def run_monitor(log=print):
     """
     Run the full job monitor. Returns a dict:
-      { "jobs": [...], "run_at": "2026-05-14 15:30", "total": N }
-    Each job dict has: title, company, location, link, source,
-                       departments, exp_range
+      { "jobs": [...], "internships": [...], "run_at": "...", "total": N }
+    Each job dict: title, company, location, link, source, departments,
+                   exp_range, is_internship
     """
     log("Fetching LinkedIn jobs...")
     raw = _get_linkedin_jobs()
@@ -433,26 +487,48 @@ def run_monitor(log=print):
             if not any(city in jd for city in TARGET_CITIES):
                 continue
 
-        depts = _detect_dept(title, jd)
-        if not depts:
+        # Internship detection
+        internship = _is_internship(title)
+
+        # Experience check — skip if 3+ years (internships bypass this)
+        exp_range = _classify_exp(jd)
+        if exp_range == "reject" and not internship:
             continue
 
-        exp_range = _classify_exp(jd)
+        if internship:
+            exp_range = "0-1"  # internships are always 0-1
+
+        # Department detection — title only for accuracy
+        depts = _detect_dept(title)
+        if not depts:
+            # Fallback: check first 200 chars of JD
+            jd_snippet = jd[:200]
+            depts = []
+            for dept, kws in TARGET_DEPTS.items():
+                if any(kw in jd_snippet for kw in kws):
+                    depts.append(dept)
+            if not depts:
+                continue
 
         passed.append({
-            "id":          job["id"],
-            "title":       title,
-            "company":     job["company"],
-            "location":    job["location"],
-            "link":        job["link"],
-            "source":      source,
-            "departments": depts,
-            "exp_range":   exp_range,
+            "id":           job["id"],
+            "title":        title,
+            "company":      job["company"],
+            "location":     job["location"],
+            "link":         job["link"],
+            "source":       source,
+            "departments":  depts,
+            "exp_range":    exp_range,
+            "is_internship": internship,
         })
 
-    log(f"Verified jobs: {len(passed)}")
+    internships = [j for j in passed if j["is_internship"]]
+    jobs        = [j for j in passed if not j["is_internship"]]
+
+    log(f"Jobs: {len(jobs)} | Internships: {len(internships)}")
     return {
-        "jobs":   passed,
-        "run_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
-        "total":  len(passed),
+        "jobs":        jobs,
+        "internships": internships,
+        "run_at":      datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "total":       len(passed),
     }

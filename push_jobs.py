@@ -13,7 +13,7 @@ import urllib.error
 from monitor_core import run_monitor
 
 RENDER_URL  = "https://pakjobs.onrender.com/api/push"
-PUSH_SECRET = "pakjobs-secret"   # must match PUSH_SECRET env var on Render
+PUSH_SECRET = "pakjobs-secret"
 
 def push(data):
     body = json.dumps(data).encode("utf-8")
@@ -36,9 +36,34 @@ def push(data):
     except Exception as e:
         print(f"\n  Push failed: {e}\n")
 
+def preview(data):
+    """Print a summary of what was found."""
+    jobs        = data.get("jobs", [])
+    internships = data.get("internships", [])
+
+    print(f"\n  {'─'*55}")
+    print(f"  JOBS ({len(jobs)})")
+    print(f"  {'─'*55}")
+    for j in jobs[:20]:
+        exp = j.get("exp_range", "?")
+        dept = ", ".join(j.get("departments", []))
+        print(f"  [{exp}] {j['title'][:45]:<45} | {j['company'][:25]:<25} | {j['location']}")
+    if len(jobs) > 20:
+        print(f"  ... and {len(jobs) - 20} more")
+
+    if internships:
+        print(f"\n  {'─'*55}")
+        print(f"  INTERNSHIPS ({len(internships)})")
+        print(f"  {'─'*55}")
+        for j in internships[:10]:
+            print(f"  {j['title'][:45]:<45} | {j['company'][:25]:<25} | {j['location']}")
+        if len(internships) > 10:
+            print(f"  ... and {len(internships) - 10} more")
+
 if __name__ == "__main__":
     print("\n  Running monitor locally...")
     data = run_monitor()
-    print(f"\n  Scan complete — {data['total']} jobs found.")
+    preview(data)
+    print(f"\n  Scan complete — {len(data['jobs'])} jobs + {len(data['internships'])} internships found.")
     print("  Pushing to website...")
     push(data)
